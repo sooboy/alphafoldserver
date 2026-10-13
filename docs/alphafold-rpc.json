@@ -1,0 +1,452 @@
+{
+  "target": "https://alphafoldserver.com/",
+  "date": "2026-10-12",
+  "build": "boq_deepmind-alphafoldserver-web_20261006.00_p0",
+  "status": "single_authenticated_job_end_to_end_verified",
+  "authenticated_session_used": true,
+  "jobs_submitted": 1,
+  "transport": {
+    "path": "/_/AlphaFoldUi/data/batchexecute",
+    "method": "POST",
+    "body": "application/x-www-form-urlencoded",
+    "fields": [
+      "f.req",
+      "at (when available)"
+    ],
+    "response_prefix": ")]}'"
+  },
+  "methods": [
+    {
+      "method": "FoldService.CreateMsa",
+      "rpc_id": "rPXxMb",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 752659,
+        "declaration": "new _.EI(\"rPXxMb\",_.eX,_.dX,[_.Gr,!1,_.Fr,\"/FoldService.CreateMsa\"])"
+      }
+    },
+    {
+      "method": "FoldService.CreateTemplate",
+      "rpc_id": "KNbI3",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 752777,
+        "declaration": "new _.EI(\"KNbI3\",_.fX,class extends _.n{constructor(a){super(a)}kd(){return _.eB(this,2)}},[_.Gr,!1,_.Fr,\"/FoldService.CreateTemplate\"])"
+      }
+    },
+    {
+      "method": "FoldService.GetDownload",
+      "rpc_id": "bWZJNb",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 752914,
+        "declaration": "new _.EI(\"bWZJNb\",_.cX,class extends _.n{constructor(a){super(a)}},[_.Gr,!0,_.Fr,\"/FoldService.GetDownload\"])"
+      }
+    },
+    {
+      "method": "FoldService.GetExampleFoldJob",
+      "rpc_id": "vyuJrc",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 753148,
+        "declaration": "new _.EI(\"vyuJrc\",_.bX,gX,[_.Gr,!0,_.Fr,\"/FoldService.GetExampleFoldJob\"])"
+      },
+      "runtime_observation": {
+        "authenticated": false,
+        "http_status": 200,
+        "job_id": "examplefold_pdb_1aay",
+        "status": 6,
+        "model_count": 5
+      }
+    },
+    {
+      "method": "FoldService.GetFoldJob",
+      "rpc_id": "EXvXWc",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 753231,
+        "declaration": "new _.EI(\"EXvXWc\",_.bX,gX,[_.Gr,!0,_.Fr,\"/FoldService.GetFoldJob\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:22:05.764Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "FoldService.GetFoldJobs",
+      "rpc_id": "uCiTI",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 753299,
+        "declaration": "new _.EI(\"uCiTI\",class extends _.n{constructor(a){super(a)}},class extends _.n{constructor(a){super(a)}},[_.Gr,!0,_.Fr,\"/FoldService.GetFoldJobs\"])"
+      }
+    },
+    {
+      "method": "FoldService.GetFoldQuota",
+      "rpc_id": "tjI49c",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 753572,
+        "declaration": "new _.EI(\"tjI49c\",class extends _.n{constructor(a){super(a)}},hX,[_.Gr,!0,_.Fr,\"/FoldService.GetFoldQuota\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:22:02.970Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "FoldService.GetFold",
+      "rpc_id": "Tkddhb",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 753733,
+        "declaration": "new _.EI(\"Tkddhb\",class extends _.n{constructor(a){super(a)}Xj(){return _.Iw(this,Ysa,3)}io(){return _.Kw(this,_.XW,4)}},class extends _.n{constructor(a){super(a)}},[_.Gr,!0,_.Fr,\"/FoldService.GetFold\"])"
+      }
+    },
+    {
+      "method": "FoldService.GetFolds",
+      "rpc_id": "yYrXS",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 753937,
+        "declaration": "new _.EI(\"yYrXS\",class extends _.n{constructor(a){super(a)}},class extends _.n{constructor(a){super(a)}},[_.Gr,!0,_.Fr,\"/FoldService.GetFolds\"])"
+      }
+    },
+    {
+      "method": "FoldService.GetMsasWith",
+      "rpc_id": "qqzLwf",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 754082,
+        "declaration": "new _.EI(\"qqzLwf\",class extends _.n{constructor(a){super(a)}},class extends _.n{constructor(a){super(a)}},[_.Gr,!0,_.Fr,\"/FoldService.GetMsasWith\"])"
+      }
+    },
+    {
+      "method": "FoldService.ListFoldJobs",
+      "rpc_id": "IbBsAc",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 754305,
+        "declaration": "new _.EI(\"IbBsAc\",class extends _.n{constructor(a){super(a)}},jX,[_.Gr,!0,_.Fr,\"/FoldService.ListFoldJobs\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:26:25.054Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "UserService.GetUser",
+      "rpc_id": "EU26qc",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 754618,
+        "declaration": "new _.EI(\"EU26qc\",_.kX,lX,[_.Gr,!0,_.Fr,\"/UserService.GetUser\"])"
+      },
+      "runtime_observation": {
+        "authenticated": false,
+        "http_status": 200,
+        "rpc_error": 16
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:22:04.654Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "UserService.UpdateUser",
+      "rpc_id": "Lg5BMe",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/asset-1.js",
+        "utf16_offset": 754741,
+        "declaration": "new _.EI(\"Lg5BMe\",_.kX,mX,[_.Gr,!1,_.Fr,\"/UserService.UpdateUser\"])"
+      }
+    },
+    {
+      "method": "FoldService.GetMsas",
+      "rpc_id": "oYroVe",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 21286,
+        "declaration": "new _.EI(\"oYroVe\",class extends _.n{constructor(a){super(a)}},D4,[_.Gr,!0,_.Fr,\"/FoldService.GetMsas\"])"
+      }
+    },
+    {
+      "method": "FoldService.CalculateFoldCost",
+      "rpc_id": "Gbje0",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 123965,
+        "declaration": "new _.EI(\"Gbje0\",class extends _.n{constructor(a){super(a)}Cd(){return _.Kw(this,_.YW,1)}getError(){return _.wF(this,L8,2,M8)}uf(){return _.cF(this,L8,2,M8)}io(){return _.wF(this,_.XW,3,M8)}},\nK8,[_.Gr,!0,_.Fr,\"/FoldService.CalculateFoldCost\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:18:35.933Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "FoldService.CountCustomMsasCreated",
+      "rpc_id": "oDm7cc",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 124330,
+        "declaration": "new _.EI(\"oDm7cc\",class extends _.n{constructor(a){super(a)}},N8,[_.Gr,!0,_.Fr,\"/FoldService.CountCustomMsasCreated\"])"
+      }
+    },
+    {
+      "method": "FoldService.CountCustomTemplatesCreated",
+      "rpc_id": "pwXru",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 124569,
+        "declaration": "new _.EI(\"pwXru\",class extends _.n{constructor(a){super(a)}},O8,[_.Gr,!0,_.Fr,\"/FoldService.CountCustomTemplatesCreated\"])"
+      }
+    },
+    {
+      "method": "FoldService.CreateDownload",
+      "rpc_id": "YeS2Vb",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 124898,
+        "declaration": "new _.EI(\"YeS2Vb\",class extends _.n{constructor(a){super(a)}},P8,[_.Gr,!1,_.Fr,\"/FoldService.CreateDownload\"])"
+      }
+    },
+    {
+      "method": "FoldService.CreateFoldJob",
+      "rpc_id": "kMnDgb",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 125177,
+        "declaration": "new _.EI(\"kMnDgb\",\n_.bX,q7,[_.Gr,!1,_.Fr,\"/FoldService.CreateFoldJob\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:18:07.161Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "FoldService.GetCcdInfo",
+      "rpc_id": "jX4pge",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 125374,
+        "declaration": "new _.EI(\"jX4pge\",class extends _.n{constructor(a){super(a)}getName(){return _.eB(this,1)}getType(){return _.eB(this,2)}},Q8,[_.Gr,!0,_.Fr,\"/FoldService.GetCcdInfo\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:18:35.361Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "FoldService.GetTemplates",
+      "rpc_id": "HIFwNc",
+      "frontend_read_only": true,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 125704,
+        "declaration": "new _.EI(\"HIFwNc\",class extends _.n{constructor(a){super(a)}},R8,[_.Gr,!0,_.Fr,\"/FoldService.GetTemplates\"])"
+      }
+    },
+    {
+      "method": "FoldService.UpdateFoldJob",
+      "rpc_id": "bteK7",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 125864,
+        "declaration": "new _.EI(\"bteK7\",class extends _.n{constructor(a){super(a)}},n7,[_.Gr,!1,_.Fr,\"/FoldService.UpdateFoldJob\"])"
+      },
+      "authenticated_observation": {
+        "evidence": "evidence/e2e-verification.json",
+        "snapshot_sha256": "9d673eccbe4ac760d8493bc3b58114a7fa1387ae00383c33acef32e9e44e090a",
+        "latest_at": "2026-10-12T03:18:49.996Z",
+        "http_status": 200,
+        "rpc_error": null,
+        "has_payload": true,
+        "request_has_at": true,
+        "response_values_omitted": true
+      }
+    },
+    {
+      "method": "FoldService.UpdateFoldJobs",
+      "rpc_id": "GNrSbe",
+      "frontend_read_only": false,
+      "transport": "POST /_/AlphaFoldUi/data/batchexecute",
+      "evidence_level": "static",
+      "evidence": {
+        "file": "evidence/preload-2.js",
+        "utf16_offset": 126024,
+        "declaration": "new _.EI(\"GNrSbe\",class extends _.n{constructor(a){super(a)}},S8,[_.Gr,!1,_.Fr,\"/FoldService.UpdateFoldJobs\"])"
+      }
+    }
+  ],
+  "job_states": {
+    "1": "pending",
+    "3": "succeeded",
+    "4": "failed",
+    "5": "draft",
+    "6": "example"
+  },
+  "frontend_poll_interval_ms": 10000,
+  "files": {
+    "private_base": "/_/v2/folds",
+    "public_example_base": "https://www.gstatic.com/alphafoldserver",
+    "single_zip": "/{JOB_ID}/fold.zip",
+    "batch_zip": "/{DOWNLOAD_ID}/folds.zip",
+    "per_model": [
+      "/{JOB_ID}/{FOLD_INDEX}/model.cif",
+      "/{JOB_ID}/{FOLD_INDEX}/full_data.json",
+      "/{JOB_ID}/{FOLD_INDEX}/summary_confidences.json"
+    ]
+  },
+  "pending": [
+    "batch download",
+    "custom MSA/template upload",
+    "expired session recovery",
+    "server-side error and rate-limit cases",
+    "minimum session cookie requirements and token refresh",
+    "standalone Go client",
+    "other input types and import-version compatibility"
+  ],
+  "observations": {
+    "summary": {
+      "ptm": 0.9,
+      "iptm": 0.93,
+      "ranking_score": 0.93
+    },
+    "zip": {
+      "url": "https://alphafoldserver.com/_/v2/folds/examplefold_pdb_1aay/fold.zip",
+      "result": "timeout after 60 seconds; no verified ZIP"
+    }
+  },
+  "public_stage_snapshot": "evidence/public-protocol.json",
+  "live_verification": {
+    "evidence": "evidence/e2e-verification.json",
+    "scope": "One browser-authenticated test; not password automation or a standalone Go client",
+    "job_alias": "STRING_6",
+    "states": [
+      5,
+      1,
+      3
+    ],
+    "model_count": 5,
+    "quota_before": 30,
+    "quota_after": 29,
+    "observed_pending_to_success_seconds": 76.992,
+    "export_dialect": "alphafoldserver",
+    "export_version": 3,
+    "zip_entries": 19,
+    "checks": 15,
+    "download_manifest": "evidence/test-downloads.json",
+    "cookie_metadata": "evidence/auth-cookie-metadata.json",
+    "credentials_recorded": false,
+    "minimum_required_cookies_verified": false
+  },
+  "scope": "alphafold-upstream",
+  "local_api_document": "LOCAL_API.zh-CN.md"
+}

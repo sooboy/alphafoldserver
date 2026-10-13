@@ -1,0 +1,38 @@
+# Credentials and research inputs must never be committed.
+private/
+*.har
+*.har.json
+*cookies*.json
+*storage-state*.json
+.env
+.env.*
+!*.example
+
+# Build outputs, local transactions and prototype archive are not product source.
+/dist/
+/evidence/
+/transactions/
+/VERIFICATION.txt
+/archive/*
+!/archive/README.md
+**/node_modules/
+/frontend/dist/
+/frontend/test-results/
+/frontend/playwright-report/
+*.log
+*.exe
+*.test
+*.out
+*.zip
+.DS_Store
+Thumbs.db
+setup-token.txt
+initial-admin-password.txt
+state.json
+profiles/
+downloads/
+
+# Unauthenticated HTML may still contain transient bootstrap/session identifiers.
+evidence/*.html
+evidence/home.headers.txt
+evidence/public-probe/*.zip

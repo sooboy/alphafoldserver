@@ -1,0 +1,4 @@
+[
+  {"name":"example-complex","modelSeeds":[],"sequences":[{"proteinChain":{"sequence":"TEACHINGS","count":1}},{"proteinChain":{"sequence":"ACDEFGHIK","count":2}}],"dialect":"alphafoldserver","version":1},
+  {"name":"example-monomer","modelSeeds":[],"sequences":[{"proteinChain":{"sequence":"ACDEFGHIKLMNPQRSTVWY","count":1}}],"dialect":"alphafoldserver","version":1}
+]

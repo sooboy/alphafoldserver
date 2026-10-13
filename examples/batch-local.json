@@ -1,0 +1,4 @@
+[
+  {"name":"example-complex","sequences":[{"sequence":"TEACHINGS","copies":1},{"sequence":"ACDEFGHIK","copies":2}]},
+  {"name":"example-monomer","sequences":[{"sequence":"ACDEFGHIKLMNPQRSTVWY","copies":1}]}
+]

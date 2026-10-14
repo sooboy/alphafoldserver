@@ -1,5 +1,7 @@
 # Go 团队平台 API（不是 AlphaFold 公共 API）
 
+首次接入建议先读 [API 调用指南](API_USAGE.zh-CN.md)，其中包含可以直接复制的请求文件、curl / PowerShell、查询下载及重试规则。本文保留路由与协议参考。
+
 命名空间 `/api/v1`；旧 Node `/v1` 已归档，不是当前发布接口，也不直接兼容迁移。Google/AlphaFold 上游调用仍见 [上游 RPC](ALPHAFOLD_RPC.zh-CN.md)，不对团队客户端暴露 Cookie、Token、CDP 地址或 `batchexecute` 代理。
 
 ## 登录与授权

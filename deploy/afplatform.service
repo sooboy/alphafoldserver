@@ -1,0 +1,20 @@
+[Unit]
+Description=FoldSpace AlphaFold team platform
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=afplatform
+Group=afplatform
+WorkingDirectory=/opt/afplatform
+EnvironmentFile=/etc/afplatform.env
+ExecStart=/opt/afplatform/afplatform serve -data ${AF_DATA} -listen ${AF_LISTEN} -public-url ${AF_PUBLIC_URL} -browser ${AF_BROWSER} -max-active-browsers ${AF_MAX_BROWSERS} -browser-idle ${AF_BROWSER_IDLE}
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillMode=control-group
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+{
+  "files": [
+    {"name": "local.json", "content": {"name": "Imported protein", "sequences": [{"sequence": "TEACHINGS", "copies": 1}]}},
+    {"name": "server.json", "content": [{"name": "Imported complex", "modelSeeds": [], "sequences": [{"proteinChain": {"sequence": "TEACHINGS", "count": 1}}, {"proteinChain": {"sequence": "ACDEFG", "count": 2}}], "dialect": "alphafoldserver", "version": 1}]}
+  ]
+}

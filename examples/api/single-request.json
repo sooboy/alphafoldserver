@@ -1,0 +1,11 @@
+{
+  "request_id": "example-single-001",
+  "input": {
+    "name": "API complex example",
+    "sequences": [
+      {"sequence": "TEACHINGS", "copies": 1},
+      {"sequence": "ACDEFGHIK", "copies": 2}
+    ]
+  },
+  "execute": false
+}

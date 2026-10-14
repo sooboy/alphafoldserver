@@ -4,17 +4,29 @@ Go 单二进制服务 + 内嵌 React / shadcn/ui 界面。团队共享服务端�
 
 这是独立团队平台，非 Google 官方产品。使用者须遵守上游使用政策与额度限制；不绕过 Google 认证、验证码或限流。
 
+## 编译与快速入口
+
+```sh
+make build       # Windows 可用 mingw32-make build，无需 Node
+make check
+make release
+```
+
+[API 调用使用文档](docs/API_USAGE.zh-CN.md) · [Makefile 运维文档](docs/MAKEFILE_OPERATIONS.zh-CN.md)。
+
+Linux 容器部署提供 [Dockerfile](Dockerfile) 与 [Compose](compose.yaml)，包含 Chromium、持久化数据卷和管理员人工登录桌面。按 [Docker 部署指南](docs/DOCKER_DEPLOY.zh-CN.md) 执行；默认仅 loopback + SSH 访问，团队入口另配 HTTPS。
+
 ## 直接运行，在网页初始化
 
 ```powershell
 # Windows：不需要 init
-.\dist\afplatform-windows-amd64-v2.exe
+.\build\afplatform.exe
 ```
 
 ```sh
 # Linux
-chmod +x ./afplatform-linux-amd64
-./afplatform-linux-amd64
+chmod +x ./build/afplatform
+./build/afplatform
 ```
 
 1. 打开 `http://127.0.0.1:8788`。
@@ -57,8 +69,8 @@ go test ./cmd/afplatform ./internal/platform
 ```sh
 npm --prefix frontend ci
 npm --prefix frontend run build
-node scripts/build.mjs
-node scripts/verify.mjs
+make build
+make verify
 ```
 
 浏览器测试使用隔离数据，不登录 Google、不消耗额度：
@@ -71,7 +83,7 @@ $env:AF_TEST_BROWSER='1'
 go test ./internal/platform -count=1
 ```
 
-`build.mjs` 生成 Windows amd64、Linux amd64/arm64 及许可；加 `--frontend` 先构建页面。Linux 交叉编译不代表 Linux 浏览器/Google 认证实测。运行时不依赖 Node、npm 或前端源码。
+`make release` 生成 Windows amd64、Linux amd64/arm64 及许可与 SHA256 清单；修改前端时先 `make frontend`。Windows 可用 `mingw32-make` 代替 `make`。Linux 交叉编译不代表 Linux 浏览器/Google 认证实测。运行时不依赖 Node、npm 或前端源码。
 
 ## 目录
 
@@ -81,11 +93,14 @@ internal/platform/         Go 认证、任务、调度、浏览器及测试
 internal/platform/assets/  内嵌网页与上游浏览器请求脚本
 frontend/                  React + TypeScript + Tailwind + shadcn/ui 源码
 frontend/tests/            Playwright UI 测试
-scripts/                   当前构建、验证与行为探针
+Makefile                   统一编译、测试、发布与运维入口
+tools/dev/                 跨平台构建/安全清理 helper（不需部署）
+deploy/                    Linux systemd 模板
+scripts/                   当前验证与行为探针
 docs/                      API、部署、上游协议及许可
 examples/                  无凭据的 JSON 样例
 archive/                   归档说明；旧原型仅保存在本机，不随 Git 发布
-private/ dist/             私有数据与构建结果，不入 Git
+private/ build/ dist/      私有数据与构建结果，不入 Git
 transactions/ evidence/    本机历史与可回滚验证证据，不入 Git
 ```
 

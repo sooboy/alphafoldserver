@@ -1,0 +1,37 @@
+# Allowlist only build inputs. Never send accounts, HARs, secrets or Git history.
+**
+!Dockerfile
+!.dockerignore
+!go.mod
+!go.sum
+!cmd/
+!cmd/**
+!internal/
+!internal/**
+!examples/
+!examples/api/
+!examples/api/*.json
+!deploy/
+!deploy/docker/
+!deploy/docker/*.sh
+!deploy/docker/NOTICE.txt
+!deploy/docker/PLAYWRIGHT-LICENSE
+!docs/
+!docs/THIRD_PARTY_NOTICES.txt
+# Defense in depth for private/generated material accidentally placed in source.
+**/.env
+**/.env.*
+**/*.har
+**/*.har.json
+**/*cookies*.json
+**/*storage-state*.json
+**/state.json
+**/setup-token.txt
+**/initial-admin-password.txt
+**/profiles/**
+**/downloads/**
+**/*.key
+**/*.pem
+**/*.log
+**/*.exe
+**/*.test

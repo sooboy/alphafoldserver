@@ -1,5 +1,7 @@
 # Go 平台部署与安全边界
 
+编译、测试、发布与服务快捷命令见 [Makefile 运维指南](MAKEFILE_OPERATIONS.zh-CN.md)。现成模板位于 `deploy/afplatform.service` 与 `deploy/afplatform.env.example`；以下配置用于说明，可按模板保持一致。
+
 ## 组成
 
 1. 单个 Go 服务实例：内置网页、用户认证、文件持久队列、调度器及 CDP WebSocket 客户端。

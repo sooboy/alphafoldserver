@@ -1,0 +1,19 @@
+Docker packaging notices
+
+The afplatform Go binary and embedded UI notices are installed at
+/usr/local/share/doc/afplatform/THIRD_PARTY_NOTICES.txt. Unlike the standalone
+binary, this container also installs Debian's Chromium and desktop packages.
+Their license/copyright records are supplied by the distribution under
+/usr/share/doc/<package>/copyright. Chromium is not Google Chrome.
+
+seccomp-chromium.json is vendored without modification from Microsoft Playwright:
+https://github.com/microsoft/playwright/blob/v1.56.1/utils/docker/seccomp_profile.json
+Source: https://raw.githubusercontent.com/microsoft/playwright/v1.56.1/utils/docker/seccomp_profile.json
+SHA256: cc3e61cabda6bbc1e53e54d27ba4d55a9d3be829b6dd1a596f4a7b31b1cc7849
+Copyright (c) Microsoft Corporation. Licensed under Apache License 2.0;
+see the accompanying PLAYWRIGHT-LICENSE file.
+
+This deny-by-default policy permits the namespace syscalls needed by the
+Chromium user-namespace sandbox. It does not grant SYS_ADMIN, privileged mode,
+an unconfined seccomp policy, or disable the browser sandbox. Host kernel/LSM
+policy still applies; assess the profile against your deployment's requirements.

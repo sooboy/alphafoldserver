@@ -1,0 +1,35 @@
+name: afplatform
+services:
+  afplatform:
+    image: afplatform:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Linux Docker Engine. Services bind only 127.0.0.1, not the public NIC.
+    network_mode: host
+    user: "10001:10001"
+    restart: unless-stopped
+    stop_grace_period: 60s
+    shm_size: "1gb"
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=./deploy/docker/seccomp-chromium.json
+    environment:
+      AF_DATA: /data
+      AF_LISTEN: "127.0.0.1:${AF_PORT:-8788}"
+      AF_PUBLIC_URL: "${AF_PUBLIC_URL:-http://127.0.0.1:8788}"
+      AF_MAX_BROWSERS: "${AF_MAX_BROWSERS:-3}"
+      AF_BROWSER_IDLE: "${AF_BROWSER_IDLE:-2m}"
+      AF_DESKTOP: "${AF_DESKTOP:-1}"
+      AF_DESKTOP_PORT: "${AF_DESKTOP_PORT:-6080}"
+      AF_VNC_PORT: "${AF_VNC_PORT:-5900}"
+    volumes:
+      - platform-data:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  platform-data:

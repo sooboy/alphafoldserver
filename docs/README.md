@@ -1,6 +1,9 @@
 # 文档索引
 
 - [快速开始](../README.md)：网页初始化、批量导入、构建和目录。
+- [API 调用使用指南](API_USAGE.zh-CN.md)：可复制的 curl / PowerShell 示例、批量、导入、查询、下载与安全重试。
+- [Makefile 编译与运维](MAKEFILE_OPERATIONS.zh-CN.md)：统一编译/测试/发布入口、systemd 管理和安全清理。
+- [Docker 部署](DOCKER_DEPLOY.zh-CN.md)：Linux 镜像、Compose、持久化数据和管理员登录桌面。
 - [本平台 API](GO_PLATFORM_API.zh-CN.md)：团队身份、批量任务、管理员接口。集成系统请使用这一层。
 - [部署与安全边界](GO_PLATFORM_DEPLOY.zh-CN.md)：HTTPS、服务端认证和数据恢复。
 - [上游 RPC](ALPHAFOLD_RPC.zh-CN.md)：内部适配协议观察，不是官方稳定公共 API。

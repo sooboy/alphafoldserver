@@ -17,7 +17,7 @@ test.beforeAll(async ({ browser }) => {
   await new Promise<void>((r) => s.close(() => r()))
   origin = `http://127.0.0.1:${port}`
   child = spawn(
-    resolve('../private/platform-v2/modified.exe'),
+    resolve('../private/platform-v2/modified' + (process.platform === 'win32' ? '.exe' : '')),
     ['serve', '-data', data, '-listen', `127.0.0.1:${port}`, '-public-url', origin],
     { windowsHide: true, stdio: 'ignore' },
   )

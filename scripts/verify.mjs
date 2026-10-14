@@ -30,21 +30,13 @@ function run(command, args, env = process.env) {
     throw Error(`${command} failed (${r.status}): ${r.error?.message || ''}`)
 }
 run('go', ['mod', 'verify'])
-run('go', ['vet', './cmd/afplatform', './internal/platform'])
-run('go', ['test', './cmd/afplatform', './internal/platform', '-count=1'])
-run('go', ['test', '-race', './cmd/afplatform', './internal/platform', '-count=1'])
-run(process.execPath, [
-  resolve(root, 'scripts/run-npm.mjs'),
-  '--prefix',
-  'frontend',
-  'run',
-  'build',
-])
-run('go', ['build', '-trimpath', '-o', 'private/platform-v2/modified.exe', './cmd/afplatform'])
-run(process.execPath, [
-  resolve(root, 'scripts/verify-platform-v2-probe.mjs'),
-  'private/platform-v2/modified.exe',
-])
-run(process.execPath, [resolve(root, 'scripts/run-npm.mjs'), '--prefix', 'frontend', 'test'])
-run(process.execPath, [resolve(root, 'scripts/build.mjs')])
+run('go', ['vet', './cmd/...', './internal/...', './tools/...'])
+run('go', ['test', './cmd/...', './internal/...', './tools/...', '-count=1'])
+run('go', ['test', '-race', './cmd/...', './internal/...', './tools/...', '-count=1'])
+run('go', ['run', './tools/dev', 'frontend'])
+const binary = 'private/platform-v2/modified' + (process.platform === 'win32' ? '.exe' : '')
+run('go', ['build', '-trimpath', '-buildvcs=false', '-o', binary, './cmd/afplatform'])
+run(process.execPath, [resolve(root, 'scripts/verify-platform-v2-probe.mjs'), binary])
+run('go', ['run', './tools/dev', 'npm', 'test'])
+run('go', ['run', './tools/dev', 'release'])
 console.log('All local checks passed. No real Google authentication or prediction performed.')

@@ -1,0 +1,7 @@
+{
+  "items": [
+    {"request_id": "example-batch-001", "input": {"name": "Complex A", "sequences": [{"sequence": "TEACHINGS", "copies": 1}, {"sequence": "ACDEFG", "copies": 2}]}},
+    {"request_id": "example-batch-002", "input": {"name": "Protein B", "sequences": [{"sequence": "ACDEFGHIK", "copies": 1}]}}
+  ],
+  "execute": false
+}

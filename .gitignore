@@ -7,9 +7,11 @@ private/
 .env
 .env.*
 !*.example
+/deploy/docker.env
 
 # Build outputs, local transactions and prototype archive are not product source.
 /dist/
+/build/
 /evidence/
 /transactions/
 /VERIFICATION.txt

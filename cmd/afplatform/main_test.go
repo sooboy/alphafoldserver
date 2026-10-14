@@ -48,6 +48,18 @@ func TestUnsafeListenersRejected(t *testing.T) {
 	}
 }
 
+func TestFreshImportDirectsToWebSetup(t *testing.T) {
+	dir := t.TempDir()
+	legacy := filepath.Join(dir, "legacy.json")
+	if err := os.WriteFile(legacy, []byte(`{"accounts":[]}`), 0600); err != nil {
+		t.Fatal(err)
+	}
+	err := run([]string{"import-node-config", "-data", filepath.Join(dir, "data"), "-input", legacy})
+	if err == nil || !strings.Contains(err.Error(), "WEB_SETUP_REQUIRED") || strings.Contains(err.Error(), "RUN_INIT_FIRST") {
+		t.Fatal("fresh import should direct to web setup, not require init:", err)
+	}
+}
+
 func TestHelpSucceedsWithoutSideEffects(t *testing.T) {
 	dir := t.TempDir()
 	t.Chdir(dir)

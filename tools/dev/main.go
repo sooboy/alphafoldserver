@@ -260,7 +260,7 @@ func run(args []string) error {
   make clean          Remove generated frontend caches only; NEVER private data/binaries
   make service-start|service-stop|service-restart|service-status|service-logs
                       Linux/systemd only; installation and permissions are manual
-Variables: TARGET_OS TARGET_ARCH OUT RELEASE_DIR DATA LISTEN PUBLIC_URL BROWSER MAX_BROWSERS SERVICE
+  Variables: TARGET_OS TARGET_ARCH OUT RELEASE_DIR DATA LISTEN PUBLIC_URL ALLOW_INSECURE_HTTP BROWSER MAX_BROWSERS SERVICE
 Windows: use mingw32-make instead of make if that is your installed command.
 `)
 		return nil
@@ -319,6 +319,7 @@ Windows: use mingw32-make instead of make if that is your installed command.
 		data := f.String("data", "private/go-platform", "private data")
 		listen := f.String("listen", "127.0.0.1:8788", "listener")
 		origin := f.String("public-url", "http://127.0.0.1:8788", "exact public origin")
+		allowHTTP := f.Bool("allow-insecure-http", false, "explicitly allow private LAN HTTP")
 		browser := f.String("browser", "", "browser executable")
 		max := f.Int("max-active-browsers", 3, "active browser cap")
 		if err = f.Parse(args[1:]); err != nil {
@@ -331,7 +332,11 @@ Windows: use mingw32-make instead of make if that is your installed command.
 		if err != nil {
 			return err
 		}
-		return command(nil, filepath.Join(dir, executableName(runtime.GOOS)), "serve", "-data", *data, "-listen", *listen, "-public-url", *origin, "-browser", *browser, "-max-active-browsers", fmt.Sprint(*max))
+		serveArgs := []string{"serve", "-data", *data, "-listen", *listen, "-public-url", *origin, "-browser", *browser, "-max-active-browsers", fmt.Sprint(*max)}
+		if *allowHTTP {
+			serveArgs = append(serveArgs, "-allow-insecure-http")
+		}
+		return command(nil, filepath.Join(dir, executableName(runtime.GOOS)), serveArgs...)
 	case "status":
 		f := flag.NewFlagSet("status", flag.ContinueOnError)
 		base := f.String("url", "http://127.0.0.1:8788", "public origin")

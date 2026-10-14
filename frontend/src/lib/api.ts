@@ -27,6 +27,16 @@ let csrf = ''
 export const setCSRF = (value: string) => {
   csrf = value
 }
+
+// getRandomValues also works on private LAN HTTP, unlike crypto.randomUUID.
+// Keep 122 random bits and UUID v4 formatting; never fall back to Math.random.
+export function newRequestID(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  bytes[6] = (bytes[6] & 0x0f) | 0x40
+  bytes[8] = (bytes[8] & 0x3f) | 0x80
+  const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
 export class APIError extends Error {
   constructor(
     public data: {
@@ -108,7 +118,7 @@ export const newItem = (): Item => {
   const d = new Date(),
     p = (n: number) => String(n).padStart(2, '0')
   return {
-    request_id: crypto.randomUUID(),
+    request_id: newRequestID(),
     input: {
       name: `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}:${p(d.getMinutes())}`,
       sequences: [{ sequence: '', copies: 1 }],

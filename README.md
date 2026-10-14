@@ -36,13 +36,39 @@ chmod +x ./build/afplatform
 
 无参数默认启动服务；`serve`、`-h` / `--help` 仍可用。旧 `init` 仅保留向后兼容，不是必需步骤。首次网页初始化不要求安装浏览器；实际认证和执行需要外部 Chrome/Chromium/Edge。
 
+### 打开页面出现 `FORBIDDEN`？
+
+这不表示要先执行 `init`。先核对**运行的是刚编译的 `build/afplatform`（Windows 为 `.exe`）**，并使用启动日志中的完整访问地址。`make` 默认只显示帮助，`make build` 才编译；不会更新 `dist/` 里的旧文件。
+
+- 默认入口是 `http://127.0.0.1:8788`。本机访问同端口的 `localhost` 首页会自动跳转到此地址；API 不做此跳转，客户端应直接使用配置的地址。
+- 地址的协议、主机、端口应与 `-public-url` 完全一致；仅改 `-listen` 不会改变 `-public-url`。其他不匹配的浏览器首页请求会显示配置提示，而不是要求初始化。
+- 例如本机改用 8899 端口：`./build/afplatform serve -listen 127.0.0.1:8899 -public-url http://127.0.0.1:8899`。使用 Make 可运行 `make run LISTEN=127.0.0.1:8899 PUBLIC_URL=http://127.0.0.1:8899`。
+- 远程团队部署默认使用 HTTPS；可信局域网可按下节显式启用 HTTP。`-public-url` 必须与浏览器实际地址一致，不要关闭 Host/Origin 校验来修复错误。首次设置的一次性凭据在服务端数据目录中读取，不通过公开接口获取。
+- 已有管理员的数据目录应显示登录页，不会再次初始化。不要为了排错删除数据或浏览器 profile；端口被旧进程占用时，新进程会启动失败，先核对日志与正在访问的进程。
+
 ```sh
 ./afplatform-linux-amd64 serve -data /srv/afplatform/data \
   -listen 127.0.0.1:8788 -public-url https://fold.example.org \
   -browser /usr/bin/google-chrome -max-active-browsers 3
 ```
 
-远程团队访问应使用 HTTPS。Linux 人工 Google 认证需要同一服务用户的受保护图形桌面。**一个可执行文件包含网页，不包含浏览器、私有数据或系统依赖。**
+远程团队访问默认使用 HTTPS。Linux 人工 Google 认证需要同一服务用户的受保护图形桌面。**一个可执行文件包含网页，不包含浏览器、私有数据或系统依赖。**
+
+### 可信局域网直接使用 HTTP（无需证书）
+
+重新编译后，显式传入 `-allow-insecure-http`。下面 `192.168.1.100` 是示例，请替换为**运行服务的电脑实际内网 IP**：
+
+```sh
+make build
+./build/afplatform serve -listen 0.0.0.0:8788 -public-url http://192.168.1.100:8788 -allow-insecure-http
+# Windows 将 ./build/afplatform 替换为 .\build\afplatform.exe
+# 或：
+make run LISTEN=0.0.0.0:8788 PUBLIC_URL=http://192.168.1.100:8788 ALLOW_INSECURE_HTTP=true
+```
+
+同事访问 `http://192.168.1.100:8788`，不是 `0.0.0.0` 或自己电脑的 `localhost`。在服务器防火墙中仅允许可信内网访问 TCP 8788；不要关闭整个防火墙。已有服务先正常停止，继续使用原 `-data`，不用 `init`，不删除数据。
+
+该模式限定 `-public-url` 使用私有 IP（IPv4 的 10/8、172.16/12、192.168/16 或 IPv6 ULA；本机 loopback 也可），并只接受私有/loopback 直接来源。不信任转发头，不能靠代理把公网来源伪装为内网。**HTTP 不加密密码、会话和研究数据**；来源地址限制不能防止可信代理/NAT 转发，禁止通过公网代理或路由器端口映射暴露。默认不启用此模式；仍保留管理员初始化凭据、登录、权限隔离、Host/Origin 和 CSRF 校验。Google / AlphaFold 上游仍使用 HTTPS，不受此开关影响。
 
 ## 批量任务
 

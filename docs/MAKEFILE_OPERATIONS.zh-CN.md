@@ -44,6 +44,14 @@ make run DATA=private/go-platform LISTEN=127.0.0.1:8788 \
   PUBLIC_URL=http://127.0.0.1:8788 MAX_BROWSERS=3
 ```
 
+可信内网可显式启用无需证书的 HTTP（替换为实际服务器内网 IP）：
+
+```sh
+make run LISTEN=0.0.0.0:8788 PUBLIC_URL=http://192.168.1.100:8788 ALLOW_INSECURE_HTTP=true
+```
+
+`ALLOW_INSECURE_HTTP` 默认 `false`，只对 Make `run` / `serve` 转为同名 CLI 开关；不是原生二进制自动读取的环境变量。仅允许私有 IP 入口和私有/loopback 直接来源，HTTP 不加密凭据，防火墙仅放行可信内网。详见 [局域网 HTTP 说明](../README.md#可信局域网直接使用-http无需证书)。
+
 Windows 含空格路径应对整个参数加引号：
 
 ```powershell

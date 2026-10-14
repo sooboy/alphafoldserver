@@ -11,6 +11,7 @@ RELEASE_DIR ?= dist
 DATA ?= private/go-platform
 LISTEN ?= 127.0.0.1:8788
 PUBLIC_URL ?= http://127.0.0.1:8788
+ALLOW_INSECURE_HTTP ?= false
 BROWSER ?=
 MAX_BROWSERS ?= 3
 SERVICE ?= afplatform.service
@@ -60,10 +61,10 @@ verify:
 
 run:
 	$(DEV) build -out "$(OUT)"
-	$(DEV) serve -out "$(OUT)" -data "$(DATA)" -listen "$(LISTEN)" -public-url "$(PUBLIC_URL)" -browser "$(BROWSER)" -max-active-browsers "$(MAX_BROWSERS)"
+	$(DEV) serve -out "$(OUT)" -data "$(DATA)" -listen "$(LISTEN)" -public-url "$(PUBLIC_URL)" -allow-insecure-http=$(ALLOW_INSECURE_HTTP) -browser "$(BROWSER)" -max-active-browsers "$(MAX_BROWSERS)"
 
 serve:
-	$(DEV) serve -out "$(OUT)" -data "$(DATA)" -listen "$(LISTEN)" -public-url "$(PUBLIC_URL)" -browser "$(BROWSER)" -max-active-browsers "$(MAX_BROWSERS)"
+	$(DEV) serve -out "$(OUT)" -data "$(DATA)" -listen "$(LISTEN)" -public-url "$(PUBLIC_URL)" -allow-insecure-http=$(ALLOW_INSECURE_HTTP) -browser "$(BROWSER)" -max-active-browsers "$(MAX_BROWSERS)"
 
 status:
 	$(DEV) status -url "$(PUBLIC_URL)"

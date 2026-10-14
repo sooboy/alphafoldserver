@@ -13,6 +13,8 @@
 
 ## 服务配置
 
+可信局域网可使用显式 `-allow-insecure-http`，无需证书：`afplatform serve -listen 0.0.0.0:8788 -public-url http://192.168.1.100:8788 -allow-insecure-http`（替换实际私有 IP）。默认仍要求非本机访问使用 HTTPS；HTTP 模式只接受私有/loopback 直接来源，但不加密密码、会话和数据，也不能防止公网代理/NAT 转发。仅通过受限内网防火墙使用，不做公网端口映射。该开关不改变 Google 上游 HTTPS，也不跳过登录、Host/Origin 或 CSRF。更多 [局域网启动说明](../README.md#可信局域网直接使用-http无需证书)。
+
 首次运行不执行 `init`：直接启动 `afplatform` / `afplatform serve`，在网页创建管理员。一次性凭据在数据目录 `setup-token.txt`，只由操作服务器的人读取输入，成功后失效；避免公开部署被首个访问者抢占。已有用户数据时不会重新初始化。网页无需浏览器即可启动，使用账号池前仍需安装 Chrome/Edge。
 
 升级前正常停止旧服务，备份私有数据，用新二进制指定原 `-data`。不要同时运行两个服务访问同一目录，也不要重新执行旧 `init`。state.json 格式保持兼容，历史任务和账号配置保留。React/shadcn/ui 页面内嵌二进制，运行不需要 Node。

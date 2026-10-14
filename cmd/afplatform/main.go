@@ -44,8 +44,8 @@ Usage:
   afplatform <command> [flags]
 
 Commands:
-  init                Legacy optional CLI administrator initialization
   serve               Start the team platform HTTP service
+  init                Legacy optional CLI administrator initialization (not required)
   import-node-config  Import legacy account IDs/labels only (not Google sessions)
   help [command]      Show global or command-specific help
 
@@ -99,7 +99,7 @@ Help: afplatform -h | afplatform --help | afplatform serve -h
 		}
 		defer s.Close()
 		if len(s.Snapshot().Users) == 0 {
-			return fmt.Errorf("RUN_INIT_FIRST")
+			return fmt.Errorf("WEB_SETUP_REQUIRED: start afplatform and create the administrator on the website before importing accounts; init is optional")
 		}
 		count := 0
 		err = s.Update(func(st *platform.State) error {
@@ -180,30 +180,15 @@ Help: afplatform -h | afplatform --help | afplatform serve -h
 		idle := f.Duration("browser-idle", 2*time.Minute, "close idle headless browser after this interval")
 		cert := f.String("tls-cert", "", "TLS certificate file")
 		key := f.String("tls-key", "", "TLS key file")
+		allowHTTP := f.Bool("allow-insecure-http", false, "allow unencrypted HTTP on a trusted private LAN (private IP public URL; never expose via a public proxy)")
 		if err := f.Parse(args[1:]); err != nil {
 			return err
 		}
 		if *limit < 1 || *limit > 20 || *idle < time.Second {
 			return fmt.Errorf("INVALID_BROWSER_LIMIT_OR_IDLE")
 		}
-		u, err := url.Parse(*public)
-		if err != nil {
+		if err := validateServerNetwork(*listen, *public, *cert, *key, *allowHTTP); err != nil {
 			return err
-		}
-		host, _, err := net.SplitHostPort(*listen)
-		if err != nil {
-			return err
-		}
-		ip := net.ParseIP(host)
-		loopback := ip != nil && ip.IsLoopback()
-		if u.Scheme != "https" && (!loopback || u.Hostname() != "127.0.0.1" && u.Hostname() != "localhost" && u.Hostname() != "::1") {
-			return fmt.Errorf("HTTPS_REQUIRED_FOR_TEAM_ACCESS")
-		}
-		if (*cert == "") != (*key == "") {
-			return fmt.Errorf("TLS_CERT_AND_KEY_REQUIRED")
-		}
-		if !loopback && *cert == "" {
-			return fmt.Errorf("NON_LOOPBACK_LISTENER_REQUIRES_TLS; or use a loopback HTTPS reverse proxy")
 		}
 		s, err := platform.OpenStore(*data)
 		if err != nil {
@@ -221,6 +206,10 @@ Help: afplatform -h | afplatform --help | afplatform serve -h
 		handler, err := platform.NewServer(engine, *public)
 		if err != nil {
 			return err
+		}
+		handler.PrivateNetworkOnly = *allowHTTP
+		if *allowHTTP {
+			fmt.Fprintln(os.Stderr, "WARNING: LAN HTTP enabled. Passwords, sessions and research data are unencrypted. Use a trusted private network and restrict the firewall; do not expose through a public proxy or port forwarding.")
 		}
 		if len(s.Snapshot().Users) == 0 {
 			fmt.Printf("First run: create your administrator on the website. Setup token file: %s\n", filepath.Join(s.Dir, "setup-token.txt"))
@@ -259,4 +248,40 @@ Help: afplatform -h | afplatform --help | afplatform serve -h
 	default:
 		return fmt.Errorf("unknown command %s", args[0])
 	}
+}
+
+func validateServerNetwork(listen, public, cert, key string, allowHTTP bool) error {
+	u, err := url.Parse(public)
+	if err != nil {
+		return err
+	}
+	host, _, err := net.SplitHostPort(listen)
+	if err != nil {
+		return err
+	}
+	ip := net.ParseIP(host)
+	loopback := ip != nil && ip.IsLoopback()
+	if allowHTTP {
+		if u.Scheme != "http" || cert != "" || key != "" {
+			return fmt.Errorf("INSECURE_HTTP_REQUIRES_HTTP_WITHOUT_TLS")
+		}
+		publicIP := net.ParseIP(u.Hostname())
+		if u.Hostname() != "localhost" && !(publicIP.IsLoopback() || publicIP.IsPrivate()) {
+			return fmt.Errorf("LAN_HTTP_REQUIRES_PRIVATE_IP_PUBLIC_URL")
+		}
+		if ip == nil || !(ip.IsLoopback() || ip.IsPrivate() || ip.IsUnspecified()) {
+			return fmt.Errorf("LAN_HTTP_REQUIRES_PRIVATE_OR_WILDCARD_LISTENER")
+		}
+		return nil
+	}
+	if u.Scheme != "https" && (!loopback || u.Hostname() != "127.0.0.1" && u.Hostname() != "localhost" && u.Hostname() != "::1") {
+		return fmt.Errorf("HTTPS_REQUIRED_FOR_TEAM_ACCESS")
+	}
+	if (cert == "") != (key == "") {
+		return fmt.Errorf("TLS_CERT_AND_KEY_REQUIRED")
+	}
+	if !loopback && cert == "" {
+		return fmt.Errorf("NON_LOOPBACK_LISTENER_REQUIRES_TLS; or use a loopback HTTPS reverse proxy")
+	}
+	return nil
 }

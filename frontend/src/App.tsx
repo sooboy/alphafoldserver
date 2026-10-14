@@ -48,6 +48,7 @@ import {
   message,
   newDraft,
   newItem,
+  newRequestID,
   readDraft,
   draftKey,
   stages,
@@ -293,7 +294,7 @@ export default function App() {
         !draft.items[0].input.sequences[0].sequence.trim()
       const items = [
         ...(empty ? [] : draft.items),
-        ...result.items.map((r) => ({ request_id: crypto.randomUUID(), input: r.input })),
+        ...result.items.map((r) => ({ request_id: newRequestID(), input: r.input })),
       ]
       if (items.length > 50) throw Error('导入后超过每批 50 个任务的上限。请分批提交。')
       persist({ items, locked: false })

@@ -1,13 +1,14 @@
 import { test, expect, type Page } from '@playwright/test'
 import { spawn, type ChildProcess } from 'node:child_process'
 import { mkdtempSync, readFileSync, existsSync, mkdirSync } from 'node:fs'
-import { tmpdir } from 'node:os'
+import { tmpdir, networkInterfaces } from 'node:os'
 import { join, resolve } from 'node:path'
 import { createServer } from 'node:net'
 
 test.describe.configure({ mode: 'serial' })
 let child: ChildProcess, origin: string, data: string, page: Page
 const output = resolve('../private/platform-v2')
+const lanHTTP = process.env.AF_TEST_LAN_HTTP === '1'
 test.beforeAll(async ({ browser }) => {
   mkdirSync(output, { recursive: true })
   data = mkdtempSync(join(tmpdir(), 'af-ui-v2-'))
@@ -15,10 +16,29 @@ test.beforeAll(async ({ browser }) => {
   await new Promise<void>((r) => s.listen(0, '127.0.0.1', r))
   const port = (s.address() as { port: number }).port
   await new Promise<void>((r) => s.close(() => r()))
-  origin = `http://127.0.0.1:${port}`
+  const lanHost = Object.values(networkInterfaces())
+    .flat()
+    .find(
+      (a) =>
+        a &&
+        a.family === 'IPv4' &&
+        !a.internal &&
+        /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(a.address),
+    )?.address
+  if (lanHTTP && !lanHost) throw new Error('LAN HTTP UI tests require a private IPv4 interface')
+  origin = `http://${lanHTTP ? lanHost : '127.0.0.1'}:${port}`
   child = spawn(
     resolve('../private/platform-v2/modified' + (process.platform === 'win32' ? '.exe' : '')),
-    ['serve', '-data', data, '-listen', `127.0.0.1:${port}`, '-public-url', origin],
+    [
+      'serve',
+      '-data',
+      data,
+      '-listen',
+      `${lanHTTP ? '0.0.0.0' : '127.0.0.1'}:${port}`,
+      '-public-url',
+      origin,
+      ...(lanHTTP ? ['-allow-insecure-http'] : []),
+    ],
     { windowsHide: true, stdio: 'ignore' },
   )
   for (let i = 0; i < 100; i++) {
@@ -64,7 +84,13 @@ async function post(path: string, body: unknown) {
 }
 
 test('first run initializes administrator from the page without init', async () => {
-  await page.goto(origin)
+  // A local hostname alias must reach the canonical setup page, not raw FORBIDDEN.
+  await page.goto(origin.replace('127.0.0.1', 'localhost'))
+  await expect(page).toHaveURL(origin + '/')
+  if (lanHTTP) {
+    expect(await page.evaluate(() => window.isSecureContext)).toBe(false)
+    expect(await page.evaluate(() => typeof crypto.randomUUID)).toBe('undefined')
+  }
   await expect(page.getByRole('heading', { name: '创建你的工作空间' })).toBeVisible()
   await page.screenshot({ path: join(output, 'setup-desktop.png'), fullPage: true })
   await page
@@ -96,6 +122,11 @@ test('manual batch preserves sequence groups, preview, retry and locked reload',
   await page.getByRole('button', { name: '确认批量提交' }).click()
   await expect(page.locator('#jobs tr')).toHaveCount(2)
   const before = await jobs()
+  expect(new Set(before.map((j: { request_id: string }) => j.request_id)).size).toBe(2)
+  for (const job of before)
+    expect(job.request_id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    )
   expect(
     before.find((j: { input: { sequences: unknown[] } }) => j.input.sequences.length === 2),
   ).toBeTruthy()

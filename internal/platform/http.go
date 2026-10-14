@@ -5,6 +5,7 @@ import (
 	"embed"
 	"encoding/json"
 	"errors"
+	"html"
 	"io"
 	"net"
 	"net/http"
@@ -28,14 +29,17 @@ type rate struct {
 	Until time.Time
 }
 type Server struct {
-	setupToken string
-	Engine     *Engine
-	Origin     string
-	host       string
-	secure     bool
-	mu         sync.Mutex
-	sessions   map[string]session
-	rates      map[string]rate
+	// Set before serving when the operator explicitly opts into private LAN HTTP.
+	// Uses the direct peer only; forwarded headers cannot grant access.
+	PrivateNetworkOnly bool
+	setupToken         string
+	Engine             *Engine
+	Origin             string
+	host               string
+	secure             bool
+	mu                 sync.Mutex
+	sessions           map[string]session
+	rates              map[string]rate
 }
 
 func NewServer(e *Engine, origin string) (*Server, error) {
@@ -195,13 +199,64 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{Name: "af_platform_session", Value: token, Path: "/", HttpOnly: true, Secure: s.secure, SameSite: http.SameSiteStrictMode, MaxAge: 28800})
 	jsonOut(w, 200, map[string]any{"user": publicUser(user), "csrf": sess.CSRF})
 }
+
+// Only canonicalize an unauthenticated local homepage navigation. API calls and
+// writes always retain the exact Host/Origin checks below. Never trust forwarded
+// headers or reflect a request-controlled destination into Location.
+func (s *Server) redirectLocalHome(w http.ResponseWriter, r *http.Request) bool {
+	if s.secure || r.Method != http.MethodGet || r.URL.Path != "/" || r.URL.RawQuery != "" || r.Header.Get("Origin") != "" || r.Header.Get("Authorization") != "" {
+		return false
+	}
+	remote, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil || !net.ParseIP(remote).IsLoopback() {
+		return false
+	}
+	want, err := url.Parse(s.Origin)
+	if err != nil {
+		return false
+	}
+	got, err := url.Parse("http://" + r.Host)
+	if err != nil || got.User != nil || got.Path != "" || got.RawQuery != "" || got.Fragment != "" {
+		return false
+	}
+	local := func(host string) bool { return host == "localhost" || host == "127.0.0.1" || host == "::1" }
+	port := func(u *url.URL) string {
+		if u.Port() == "" {
+			return "80"
+		}
+		return u.Port()
+	}
+	if !local(want.Hostname()) || !local(got.Hostname()) || port(want) != port(got) {
+		return false
+	}
+	http.Redirect(w, r, s.Origin+"/", http.StatusTemporaryRedirect)
+	return true
+}
+
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "no-store")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("Referrer-Policy", "no-referrer")
 	w.Header().Set("Content-Security-Policy", "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
+	if s.PrivateNetworkOnly {
+		host, _, err := net.SplitHostPort(r.RemoteAddr)
+		ip := net.ParseIP(host)
+		if err != nil || !(ip.IsLoopback() || ip.IsPrivate()) {
+			errorOut(w, fail("FORBIDDEN"))
+			return
+		}
+	}
 	if r.Host != s.host || (r.Header.Get("Origin") != "" && r.Header.Get("Origin") != s.Origin) {
+		if r.Host != s.host && s.redirectLocalHome(w, r) {
+			return
+		}
+		if r.Method == http.MethodGet && r.URL.Path == "/" && strings.Contains(r.Header.Get("Accept"), "text/html") {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.WriteHeader(http.StatusForbidden)
+			_, _ = io.WriteString(w, `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>访问地址不匹配</title><body><h1>访问地址不匹配</h1><p>当前访问地址或请求来源与服务配置不一致，因此请求被拒绝。</p><p>请使用启动日志中显示的地址：<a href="`+html.EscapeString(s.Origin+"/")+`">`+html.EscapeString(s.Origin)+`</a>，或将服务的 <code>-public-url</code> 设置为实际访问的协议、主机和端口（不带路径）。更改后需重启服务。</p><p>这不是尚未初始化的错误，不需要执行 <code>init</code>，也不要删除数据目录。使用正确地址后，首次运行会显示网页管理员初始化；已有管理员则显示登录页。公网访问须使用 HTTPS；可信局域网 HTTP 需管理员显式启用。</p></body></html>`)
+			return
+		}
 		errorOut(w, fail("FORBIDDEN"))
 		return
 	}
